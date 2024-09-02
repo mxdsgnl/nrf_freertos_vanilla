@@ -1,0 +1,18 @@
+{
+    "makefile.loggingLevel": "Debug",
+    "makefile.makefilePath": "C:/th24/fw/nrf_helloworld/ws/nrf_reader/Makefile",
+    "makefile.extensionLog": "makefile_log",
+    "makefile.extensionOutputFolder": "./makefile_outputs",
+    "C_Cpp.default.compilerPath": "c:\\Program Files (x86)\\GNU Arm Embedded Toolchain\\10 2021.10\\bin\\arm-none-eabi-gcc.exe",
+    "files.associations": {
+        "freertos.h": "c",
+        "portable.h": "c",
+        "portmacro.h": "c",
+        "portmacro_cmsis.h": "c",
+        "app_util.h": "c",
+        "bsp.h": "c",
+        "uart.h": "c",
+        "app_uart.h": "c",
+        "app_util_platform.h": "c"
+    }
+}

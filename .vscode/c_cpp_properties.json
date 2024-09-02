@@ -1,0 +1,49 @@
+{
+    "configurations": [
+        {
+            "name": "gcc-arm-none-eabi",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/config/nrf52840/config",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/components/libraries/**",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/components/drivers_nrf/nrf_soc_nosd",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/components/boards",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/modules/nrfx/templates/nrf52840/**",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/modules/nrfx/hal",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/modules/nrfx",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/modules/nrfx/templates",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/modules/nrfx/mdk",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/modules/nrfx/drivers/include",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/components/toolchain/cmsis/include",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/integration/nrfx/legacy",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/external/FreeRTOS/source/include",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/external/freertos/portable/GCC/nrf52",
+                "C:/nrf/nRF5_SDK_17.1.0_ddde560/external/freertos/portable/CMSIS/nrf52"
+
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "APP_TIMER_FREERTOS",
+                "BOARD_PCA10056",
+                "CONFIG_GPIO_AS_PINRESET",
+                "DEBUG",
+                "FLOAT_ABI_HARD",
+                "NRF52840_XXAA",
+                "mcpu=cortex-m4",
+                "mthumb-mabi=aapcs",
+                "Wall-Wunused",
+                "mfloat-abi",
+                "ffunction-sections-fdata-sections-fno-strict-aliasing",
+                "fno-builtin-fshort-enums",
+                "USE_APP_CONFIG"
+            ],
+            "intelliSenseMode": "windows-gcc-arm",
+            "cStandard": "c99",
+            "cppStandard": "c++98",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
