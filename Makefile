@@ -1,5 +1,5 @@
 PROJECT_NAME     := freertos_example
-TARGETS          := nrf52840_xxaa
+TARGETS          := nrf52840_xxac
 OUTPUT_DIRECTORY := _build
 
 ifndef NRF_SDK_ROOT
@@ -12,7 +12,7 @@ PROJ_DIR := .
 GIT_VERSION := $(git log --pretty=format:%h -n 1 .)
 GIT_DIRTY := $(git diff-files --quiet --relative . || echo '-dirty')
 
-$(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
+$(OUTPUT_DIRECTORY)/$(TARGETS).out: \
   LINKER_SCRIPT  := $(PROJ_DIR)/src/freertos_example_linker.ld
 
 
@@ -74,7 +74,8 @@ SRC_FILES += \
   $(SDK_ROOT)/external/freertos/source/portable/Common/mpu_wrappers.c \
   $(SDK_ROOT)/external/freertos/portable/GCC/nrf52/port.c \
   $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis.c \
-  $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c
+  $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c \
+  $(SDK_ROOT)/modules/nrfx/drivers/src/prs/nrfx_prs.c
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -193,10 +194,10 @@ LDFLAGS += -Wl,--gc-sections
 LDFLAGS += --specs=nano.specs
 LDFLAGS += -u _printf_float
 
-nrf52840_xxaa: CFLAGS += -D__HEAP_SIZE=0
-nrf52840_xxaa: CFLAGS += -D__STACK_SIZE=8192
-nrf52840_xxaa: ASMFLAGS += -D__HEAP_SIZE=0
-nrf52840_xxaa: ASMFLAGS += -D__STACK_SIZE=8192
+$(TARGETS): CFLAGS += -D__HEAP_SIZE=0
+$(TARGETS): CFLAGS += -D__STACK_SIZE=8192
+$(TARGETS): ASMFLAGS += -D__HEAP_SIZE=0
+$(TARGETS): ASMFLAGS += -D__STACK_SIZE=8192
 
 # Add standard libraries at the very end of the linker input, after all objects
 # that may need symbols provided by these libraries.
@@ -206,12 +207,12 @@ LIB_FILES += -lc -lnosys -lm
 .PHONY: default help
 
 # Default target - first one defined
-default: nrf52840_xxaa
+default: $(TARGETS)
 
 # Print all targets that can be built
 help:
 	@echo following targets are available:
-	@echo		nrf52840_xxaa
+	@echo		$(TARGETS)
 	@echo		flash_softdevice
 	@echo		sdk_config - starting external tool for editing sdk_config.h
 	@echo		flash      - flashing binary
@@ -222,14 +223,14 @@ TEMPLATE_PATH := $(SDK_ROOT)/components/toolchain/gcc
 include $(TEMPLATE_PATH)/Makefile.common
 RM := $(if $(filter Windows%,$(OS)),rmdir /q /s,rm -rf)
 
-$(foreach target, $(TARGETS), $(call define_target, $(target)))
+$(foreach target, $(TARGETS), $(call define_target, $(TARGETS)))
 
 .PHONY: flash flash_softdevice erase version
 
 # Flash the program
 flash: default
-	@echo Flashing: $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex
-	nrfjprog -f nrf52 --program $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex --sectorerase
+	@echo Flashing: $(OUTPUT_DIRECTORY)/$(TARGETS).hex
+	nrfjprog -f nrf52 --program $(OUTPUT_DIRECTORY)/$(TARGETS).hex --sectorerase --verify
 	nrfjprog -f nrf52 --reset
 
 clean:

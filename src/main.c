@@ -54,11 +54,15 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
-#include "bsp.h"
+// #include "bsp.h"
 #include "nordic_common.h"
 #include "nrf_drv_clock.h"
 #include "sdk_errors.h"
 #include "app_error.h"
+#include "uart.h"
+#include "board.h"
+
+#define BUILD_INFO_STRING ("" __DATE__" "__TIME__" "VERSION"\r\n")
 
 #if LEDS_NUMBER <= 2
 #error "Board is not equipped with enough amount of LEDs"
@@ -68,6 +72,7 @@
 #define TIMER_PERIOD      1000          /**< Timer period. LED1 timer will expire after 1000 ms */
 
 TaskHandle_t  led_toggle_task_handle;   /**< Reference to LED0 toggling FreeRTOS task. */
+TaskHandle_t  msg_pritn_task_handle;   /**< Reference to LED0 toggling FreeRTOS task. */
 TimerHandle_t led_toggle_timer_handle;  /**< Reference to LED1 toggling FreeRTOS timer. */
 
 /**@brief LED0 task entry function.
@@ -79,7 +84,7 @@ static void led_toggle_task_function (void * pvParameter)
     UNUSED_PARAMETER(pvParameter);
     while (true)
     {
-        bsp_board_led_invert(BSP_BOARD_LED_0);
+        led_toggle(LED0);
 
         /* Delay a task for a given number of ticks */
         vTaskDelay(TASK_DELAY);
@@ -95,22 +100,35 @@ static void led_toggle_task_function (void * pvParameter)
 static void led_toggle_timer_callback (void * pvParameter)
 {
     UNUSED_PARAMETER(pvParameter);
-    bsp_board_led_invert(BSP_BOARD_LED_1);
+    led_toggle(LED1);
 }
+
+static void print_msg_task_function(void * pvParameter) {
+    while(true) {
+        DebugPrint("\nHello\r\n");
+        vTaskDelay(100);
+    }
+}
+
 
 int main(void)
 {
     ret_code_t err_code;
 
+    board_init();
+
+    DebugPrint("\r\nboot: %s\r\n", BUILD_INFO_STRING);
+
     /* Initialize clock driver for better time accuracy in FREERTOS */
     err_code = nrf_drv_clock_init();
     APP_ERROR_CHECK(err_code);
 
-    /* Configure LED-pins as outputs */
-    bsp_board_init(BSP_INIT_LEDS);
+    // /* Configure LED-pins as outputs */
+    // bsp_board_init(BSP_INIT_LEDS);
 
     /* Create task for LED0 blinking with priority set to 2 */
     UNUSED_VARIABLE(xTaskCreate(led_toggle_task_function, "LED0", configMINIMAL_STACK_SIZE + 200, NULL, 2, &led_toggle_task_handle));
+    UNUSED_VARIABLE(xTaskCreate(print_msg_task_function, "msg_print", configMINIMAL_STACK_SIZE + 200, NULL, 2, &msg_pritn_task_handle));
 
     /* Start timer for LED1 blinking */
     led_toggle_timer_handle = xTimerCreate( "LED1", TIMER_PERIOD, pdTRUE, NULL, led_toggle_timer_callback);
